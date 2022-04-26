@@ -7,6 +7,11 @@ let totalSlice, t, step;
 let line, line2, line3;
 let draggableObjects = [];
 let control1, control2, control3, control4;
+let samplePoint = [];
+const params = {
+  uniform: true,
+  tension: 0.5,
+};
 init();
 animate();
 
@@ -24,11 +29,18 @@ function updatePositions() {
   const positions = line.geometry.attributes.position.array;
   let x, y, z, index;
   x = y = z = index = 0;
-  // console.log(positions.length);
+  // console.log(samplePoint.length);
   for (let i = 0; i <= totalSlice * 3; i += 3) {
-    positions[i] = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
-    positions[i + 1] = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
+    update_x = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
+    update_y = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
+    positions[i] = update_x;
+    positions[i + 1] = update_y;
     positions[i + 2] = 0;
+    // const sample_positions = samplePoint[i].geometry.attributes.position.array;
+    // sample_positions[i] = update_x;
+    // sample_positions[i + 1] = update_y;
+    const sample_idx = i / 3;
+    samplePoint[sample_idx].position.set(update_x, update_y, 0);
     t += step;
   }
 
@@ -55,6 +67,16 @@ function creatControl(color, size) {
   return plane;
 }
 
+function creatSample(color, size) {
+  const geometry = new THREE.CircleGeometry(size, 32);
+  const material = new THREE.MeshBasicMaterial({
+    color: color,
+    side: THREE.DoubleSide,
+  });
+  const plane = new THREE.Mesh(geometry, material);
+  return plane;
+}
+
 // implementation of cubie bezier curve
 function bezier_curve_compute(t, p1, p2, p3, p4) {
   const t1 = 1 - t;
@@ -66,7 +88,7 @@ function bezier_curve_compute(t, p1, p2, p3, p4) {
 }
 
 function init() {
-  totalSlice = 100;
+  totalSlice = 50;
   step = 1 / totalSlice;
   t = 0;
   container = document.getElementById("maincanvas");
@@ -80,6 +102,10 @@ function init() {
   document.body.style.overflow = "hidden";
   document.body.style.position = "fixed";
   container.appendChild(renderer.domElement);
+
+  const gui = new dat.GUI()
+  gui.domElement.id = 'gui';
+  const cubeFolder = gui.addFolder('Cube')
 
   camera = new THREE.PerspectiveCamera(
     45,
@@ -127,6 +153,10 @@ function init() {
     x = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
     y = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
     points.push(new THREE.Vector3(x, y, 0));
+    sample = creatSample(0x4989bb, 0.5);
+    sample.position.x = x;
+    sample.position.y = y;
+    samplePoint.push(sample);
     t += step;
   }
 
@@ -135,16 +165,16 @@ function init() {
     color: 0xf7474b,
     linewidth: 1,
   });
-  points2.push(new THREE.Vector3(p0x, p0y, -.1));
-  points2.push(new THREE.Vector3(p1x, p1y, -.1));
+  points2.push(new THREE.Vector3(p0x, p0y, -0.1));
+  points2.push(new THREE.Vector3(p1x, p1y, -0.1));
 
   const points3 = [];
   const material3 = new THREE.LineBasicMaterial({
     color: 0xf7474b,
     linewidth: 1,
   });
-  points3.push(new THREE.Vector3(p3x, p3y, -.1));
-  points3.push(new THREE.Vector3(p2x, p2y, -.1));
+  points3.push(new THREE.Vector3(p3x, p3y, -0.1));
+  points3.push(new THREE.Vector3(p2x, p2y, -0.1));
 
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
   line = new THREE.Line(geometry, material);
@@ -159,7 +189,7 @@ function init() {
   const divisions = 30;
 
   const gridHelper = new THREE.GridHelper(size, divisions);
-  gridHelper.rotateOnAxis(new THREE.Vector3(1,0,0), 1.5708);
+  gridHelper.rotateOnAxis(new THREE.Vector3(1, 0, 0), 1.5708);
   gridHelper.position.z = -1;
   scene.add(gridHelper);
   scene.add(line);
@@ -170,6 +200,9 @@ function init() {
   scene.add(control3);
   scene.add(control4);
 
+  for (let i = 0; i <= totalSlice; i++) {
+    scene.add(samplePoint[i]);
+  }
   draggableObjects.push(control1);
   draggableObjects.push(control2);
   draggableObjects.push(control3);

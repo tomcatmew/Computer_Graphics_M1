@@ -7,7 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.101.1/build/three.min.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/945200/OrbitControls.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/a1fb0b5b/examples/js/controls/DragControls.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
+    <link rel="stylesheet" href="style.css"></script>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -23,7 +25,9 @@
             </a>
           </div>
         </div>
-        <div class="container" id="maincanvas"></div>
+        <div id="placeui"></div>
+        <div class="container" id="maincanvas">
+        </div>
       </div>
       <div class="sidebar">
         <div class="profile">
@@ -39,13 +43,13 @@
             </a>
           </li>
           <li>
-            <a href="bezier.html" class="active">
+            <a href="bezier.html">
               <span class="icon"><i class="fas fa-desktop"></i></span>
               <span class="item">Bezier Curve</span>
             </a>
           </li>
           <li>
-            <a href="adaptive.html">
+            <a href="adaptive.html" class="active">
               <span class="icon"><i class="fas fa-user-friends"></i></span>
               <span class="item">Adaptive T BC</span>
             </a>
@@ -88,6 +92,6 @@
       </div>
     </div>
 
-    <script src="bezier.js" defer></script>
+    <script src="adaptive.js" defer></script>
   </body>
 </html>
