@@ -40,14 +40,20 @@
           <p>
             You can switch the tab by clicking the button on the left sidebar.
           </p>
-          <br>
+          <p>
+            <b>
+              <a href="https://github.com/tomcatmew/cg_m1"
+                >Github Source Code</a
+              ></b
+            >
+          </p>
+          <br />
           <p>
             このページは、東京大学S1S2-0510029コンピュータグラフィックスコースの私の課題ページです。
           </p>
 
           <p>
-            Bezier curve, Catmull-Rom, B-Spline, K-Curve and
-            C<sup>2</sup>
+            Bezier curve, Catmull-Rom, B-Spline, K-Curve and C<sup>2</sup>
             splines.などのパラメトリック曲線のthree.jsの実装を紹介しています。
           </p>
 
@@ -57,6 +63,27 @@
 
           <p>
             左サイドバーのボタンをクリックすると、タブを切り替えることができます。
+          </p>
+          <p>
+            <b>
+              <a href="https://github.com/tomcatmew/cg_m1"
+                >ソースコード こちら</a
+              >
+            </b>
+          </p>
+          <br />
+          <br />
+          <h1>説明-考察-感想</h1>
+          <br />
+          <p>左サイドバーをクリックすると、私の実装を見ることができます。</p>
+          <p>
+            等長セグメント(同じサンプル距離)でベジェ曲線を作るために、Loop-Up-Tableを使って等長セグメントのおおよその時間スケールを求めました。
+          </p>
+          <p>
+            同じサンプル距離の点を繰り返し、近傍の点を見つけ、「Loop-Up-Table」を使ってt値をremapする。
+          </p>
+          <p>
+            重要なのは、t値更新中にオリジナルt値テーブルを変更してはいけないということです。そのため、更新時にt値テーブルをコピーする必要があります。
           </p>
           <p class="cp-text">
             © Copyright 2022 Yifei Chen - University of Tokyo
