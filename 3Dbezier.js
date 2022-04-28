@@ -1,3 +1,6 @@
+// Copyright Yifei Chen - University of Tokyo Creative Informatics
+// For Computer Graphics homework assignment 1
+
 var container, stats, controls;
 var camera, scene, renderer, light;
 var draggableObjects = [];

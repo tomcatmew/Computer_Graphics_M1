@@ -9,7 +9,7 @@
     <script src="https://cdn.rawgit.com/mrdoob/three.js/a1fb0b5b/examples/js/controls/DragControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
     <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css"></script>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -25,7 +25,9 @@
             </a>
           </div>
         </div>
-        <div class="container" id="maincanvas"></div>
+        <div id="placeui"></div>
+        <div class="container" id="maincanvas">
+        </div>
       </div>
       <div class="sidebar">
         <div class="profile">
@@ -42,7 +44,7 @@
             </a>
           </li>
           <li>
-            <a href="bezier.html" class="active">
+            <a href="bezier.html">
               <span class="icon"><i class="fas fa-bezier-curve"></i></span>
               <span class="item">Bezier Curve</span>
             </a>
@@ -60,7 +62,7 @@
             </a>
           </li>
           <li>
-            <a href="catmull.html">
+            <a href="catmull.html" class="active">
               <span class="icon"><i class="fas fa-bezier-curve"></i></span>
               <span class="item">Catmull-Rom</span>
             </a>
@@ -93,6 +95,6 @@
 
     </div>
 
-    <script src="bezier.js" defer></script>
+    <script src="catmull.js" defer></script>
   </body>
 </html>

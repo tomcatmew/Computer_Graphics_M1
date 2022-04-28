@@ -8,6 +8,7 @@ let line, line2, line3;
 let draggableObjects = [];
 let control1, control2, control3, control4;
 let current_sample;
+let controlPoints = [];
 let samplePoint = [];
 const material_line = new THREE.LineBasicMaterial({ color: 0x000000 });
 const params = {
@@ -33,10 +34,13 @@ function updatePositions() {
     const positions = line.geometry.attributes.position.array;
     let x, y, z, index;
     x = y = z = index = 0;
+
+
     // console.log(samplePoint.length);
     for (let i = 0; i <= current_sample * 3; i += 3) {
-      update_x = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
-      update_y = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
+      update_p = catmull_rom(t);
+      update_x = update_p.x;
+      update_y = update_p.y;
       if (i == current_sample * 3) {
         positions[i] = p3x;
         positions[i + 1] = p3y;
@@ -111,20 +115,20 @@ function update_samples() {
   current_sample = params.Samples;
   step = 1 / current_sample;
   t = 0;
+
   for (let i = 0; i < current_sample; i++) {
-    let x = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
-    let y = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
-    points.push(new THREE.Vector3(x, y, 0));
-    new_sample = creatSample(0x4989bb, 0.5);
-    new_sample.position.x = x;
-    new_sample.position.y = y;
-    samplePoint.push(new_sample);
+    sample_p = catmull_rom(t);
+    points.push(sample_p);
+    sample = creatSample(0x4989bb, 0.5);
+    sample.position.x = sample_p.x;
+    sample.position.y = sample_p.y;
+    samplePoint.push(sample);
     t += step;
     if (i == current_sample - 1) {
       let last_x = p3x;
       let last_y = p3y;
       points.push(new THREE.Vector3(last_x, last_y, 0));
-      last_sample = creatSample(0x4989bb, 0.5);
+      let last_sample = creatSample(0x4989bb, 0.5);
       last_sample.position.x = last_x;
       last_sample.position.y = last_y;
       samplePoint.push(last_sample);
@@ -140,7 +144,32 @@ function update_samples() {
   updatePositions();
 }
 
-// -------------implementation of cubie bezier curve-------------------
+// -------------implementation of Catmull-Rom Splines-------------------
+function catmull_rom(t) {
+  tt = t * t;
+  ttt = tt * t;
+
+  q1 = -ttt + 2 * tt - t;
+  q2 = 3 * ttt - 5 * tt + 2;
+  q3 = -3 * ttt + 4 * tt + t;
+  q4 = ttt - tt;
+
+  tx =
+    0.5 *
+    (control2.position.x * q1 +
+      control1.position.x * q2 +
+      control4.position.x * q3 +
+      control3.position.x * q4);
+  ty =
+    0.5 *
+    (control2.position.y * q1 +
+      control1.position.y * q2 +
+      control4.position.y * q3 +
+      control3.position.y * q4);
+
+  return new THREE.Vector3(tx, ty, 0);
+}
+
 function bezier_curve_compute(t, p1, p2, p3, p4) {
   const t1 = 1 - t;
   const t1_3 = Math.pow(t1, 3);
@@ -199,10 +228,10 @@ function init() {
   control2 = creatControl(0xf7474b, 1.0);
   control3 = creatControl(0xf7474b, 1.0);
   control4 = creatControl(0x333333, 1.5);
-  control1.position.set(-20, -3, 0);
-  control2.position.set(40, -20, 0);
-  control3.position.set(-30, 20, 0);
-  control4.position.set(35, 3, 0);
+  control1.position.set(-10, -5, 0);
+  control2.position.set(-20, 30, 0);
+  control3.position.set(40, 20, 0);
+  control4.position.set(20, -5, 0);
 
   const points = [];
 
@@ -216,12 +245,11 @@ function init() {
   p3y = control4.position.y;
 
   for (let i = 0; i < current_sample; i++) {
-    x = bezier_curve_compute(t, p0x, p1x, p2x, p3x);
-    y = bezier_curve_compute(t, p0y, p1y, p2y, p3y);
-    points.push(new THREE.Vector3(x, y, 0));
+    sample_p = catmull_rom(t);
+    points.push(sample_p);
     sample = creatSample(0x4989bb, 0.5);
-    sample.position.x = x;
-    sample.position.y = y;
+    sample.position.x = sample_p.x;
+    sample.position.y = sample_p.y;
     samplePoint.push(sample);
     t += step;
     if (i == current_sample - 1) {
