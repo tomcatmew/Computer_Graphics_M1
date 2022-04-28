@@ -2,4 +2,5 @@
 コンピュータグラフィクス論基本課題M1  Computer Graphics homework 1\
 Author : Yifei Chen - University of Tokyo, Creative Informatics
 
-[Assignment page]()
+Implementation by three.js\
+[基本課題M1](tomcatmew.github.io/cg_m1/)
